@@ -1,0 +1,17 @@
+{
+    "name": "Housing",
+    "rootNamespace": "Housing",
+    "references": [
+        "Essentials",
+        "ObjectPooling"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
