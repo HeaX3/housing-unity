@@ -2,60 +2,61 @@
 using System.Collections.Generic;
 using System.Linq;
 using Essentials;
+using MultiplayerProtocol;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Housing
 {
-    public class HousingMeshChunk
+    public class HousingMeshChunk : ISerializableValue
     {
-        public readonly Vector3Int position;
-        public readonly Vector3Int size;
-        public readonly float tileSize;
-        public readonly Vector3 worldPosition;
-        public readonly Vector3Int tilePosition;
+        public Vector3Int position { get; private set; }
+        public Vector3Int size { get; private set; }
+        public float tileSize { get; private set; }
+        public Vector3 worldPosition { get; private set; }
+        public Vector3Int tilePosition { get; private set; }
 
         /// <summary>
         /// Specifies space type, e.g. void, air, water, lava<br />
         /// Contains indices referencing the types array
         /// </summary>
-        public readonly ushort[] space; // length: size.y * size.z * size.x
+        public ushort[] space { get; private set; } // length: size.y * size.z * size.x
 
         /// <summary>
         /// Specifies floor type, e.g. wood, stone, steel (y-negative from the tile center)<br />
         /// Contains indices referencing the types array
         /// </summary>
-        public readonly ushort[] floor; // length: size.y * size.z * size.x
+        public ushort[] floor { get; private set; } // length: size.y * size.z * size.x
 
         /// <summary>
         /// Specifies wall type of north facing walls (z-positive from the tile center)<br />
         /// Contains indices referencing the types array
         /// </summary>
-        public readonly ushort[] wallsNorth; // length: size.y * size.z * size.x
+        public ushort[] wallsNorth { get; private set; } // length: size.y * size.z * size.x
 
         /// <summary>
         /// Specifies wall type of east facing walls (x-positive from the tile center)<br />
         /// Contains indices referencing the types array
         /// </summary>
-        public readonly ushort[] wallsEast; // length: size.y * size.z * size.x
+        public ushort[] wallsEast { get; private set; } // length: size.y * size.z * size.x
 
         /// <summary>
         /// Specifies wall type of south facing walls (z-negative from the tile center)<br />
         /// Contains indices referencing the types array
         /// </summary>
-        public readonly ushort[] wallsSouth; // length: size.y * size.z * size.x
+        public ushort[] wallsSouth { get; private set; } // length: size.y * size.z * size.x
 
         /// <summary>
         /// Specifies wall type of west facing walls (x-negative from the tile center)<br />
         /// Contains indices referencing the types array
         /// </summary>
-        public readonly ushort[] wallsWest; // length: size.y * size.z * size.x
+        public ushort[] wallsWest { get; private set; } // length: size.y * size.z * size.x
 
         /// <summary>
         /// Specifies ceiling type, e.g. wood, stone, steel (y-positive from the tile center)<br />
         /// Contains indices referencing the types array
         /// </summary>
-        public readonly ushort[] ceiling; // length: size.y * size.z * size.x
+        public ushort[] ceiling { get; private set; } // length: size.y * size.z * size.x
 
         /// <summary>
         /// Array of types used within this chunk
@@ -63,6 +64,11 @@ namespace Housing
         private readonly List<NamespacedKey> _types;
 
         public IReadOnlyList<NamespacedKey> types => _types;
+
+        public HousingMeshChunk()
+        {
+            _types = new List<NamespacedKey>();
+        }
 
         public HousingMeshChunk(Vector3Int position, Vector3Int size, float tileSize)
         {
@@ -118,6 +124,41 @@ namespace Housing
             this.wallsWest = wallsWest.ToArray();
             this.ceiling = ceiling.ToArray();
             _types = new List<NamespacedKey>(types);
+        }
+
+        public void SerializeInto(SerializedData message)
+        {
+            message.Write(position);
+            message.Write(size);
+            message.Write(Mathf.RoundToInt(tileSize * 100));
+            message.Write(worldPosition);
+            message.Write(tilePosition);
+            message.Write(space);
+            message.Write(floor);
+            message.Write(wallsNorth);
+            message.Write(wallsEast);
+            message.Write(wallsSouth);
+            message.Write(wallsWest);
+            message.Write(ceiling);
+            message.Write(_types);
+        }
+
+        public void DeserializeFrom(SerializedData message)
+        {
+            position = message.ReadVector3Int();
+            size = message.ReadVector3Int();
+            tileSize = message.ReadInt() / 100f;
+            worldPosition = message.ReadVector3();
+            tilePosition = message.ReadVector3Int();
+            space = message.ReadUShortArray();
+            floor = message.ReadUShortArray();
+            wallsNorth = message.ReadUShortArray();
+            wallsEast = message.ReadUShortArray();
+            wallsSouth = message.ReadUShortArray();
+            wallsWest = message.ReadUShortArray();
+            ceiling = message.ReadUShortArray();
+            _types.Clear();
+            _types.AddRange(message.ReadNamespacedKeys());
         }
 
         /// <summary>

@@ -3,7 +3,8 @@
     "rootNamespace": "Housing",
     "references": [
         "Essentials",
-        "ObjectPooling"
+        "ObjectPooling",
+        "MultiplayerProtocol"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

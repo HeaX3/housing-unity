@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using Essentials;
 using JetBrains.Annotations;
+using MultiplayerProtocol;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Housing
 {
-    public class HousingMesh
+    public class HousingMesh : ISerializableValue
     {
         public Vector3Int min { get; private set; }
         public Vector3Int max { get; private set; }
         public bool hasBounds { get; private set; }
 
-        public readonly Vector3Int chunkSize;
-        public readonly float tileSize;
+        public Vector3Int chunkSize { get; private set; }
+        public float tileSize { get; private set; }
         private readonly List<HousingMeshChunk> _chunks = new();
         public IReadOnlyCollection<HousingMeshChunk> chunks => _chunks;
 
@@ -23,6 +24,27 @@ namespace Housing
         {
             this.chunkSize = chunkSize;
             this.tileSize = tileSize;
+        }
+
+        public void SerializeInto(SerializedData message)
+        {
+            message.Write(min);
+            message.Write(max);
+            message.Write(hasBounds);
+            message.Write(chunkSize);
+            message.Write(Mathf.RoundToInt(tileSize * 100));
+            message.Write(_chunks);
+        }
+
+        public void DeserializeFrom(SerializedData message)
+        {
+            min = message.ReadVector3Int();
+            max = message.ReadVector3Int();
+            hasBounds = message.ReadBool();
+            chunkSize = message.ReadVector3Int();
+            tileSize = message.ReadInt() / 100f;
+            _chunks.Clear();
+            _chunks.AddRange(message.ReadArray<HousingMeshChunk>());
         }
 
         public void SetBounds(Vector3Int min, Vector3Int max)
