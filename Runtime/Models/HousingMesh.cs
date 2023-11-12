@@ -26,6 +26,10 @@ namespace Housing
             this.tileSize = tileSize;
         }
 
+        public HousingMesh()
+        {
+        }
+
         public void SerializeInto(SerializedData message)
         {
             message.Write(min);
