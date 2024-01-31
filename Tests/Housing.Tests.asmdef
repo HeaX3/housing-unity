@@ -1,0 +1,19 @@
+{
+    "name": "Housing.Tests",
+    "rootNamespace": "Housing.Tests",
+    "references": [
+        "Housing",
+        "Essentials"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

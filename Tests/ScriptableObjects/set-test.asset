@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7637e200e1942128ee64b3e7ffc64b8, type: 3}
+  m_Name: set-test
+  m_EditorClassIdentifier: 
+  _defaultSpace: generic:air
+  _defaultFloor: test:floor
+  _defaultWall: test:wall
+  _defaultCeiling: test:ceiling
+  _templates:
+  - {fileID: -5374945682598824889, guid: 27adc506346736542864082779373419, type: 3}
+  - {fileID: -5374945682598824889, guid: c086fb79831e9434b92edbd0f8a4e5d4, type: 3}
+  - {fileID: -5374945682598824889, guid: 85ee61ef5d0d1294fb904023f33641c7, type: 3}
